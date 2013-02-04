@@ -9,7 +9,7 @@ SITES_AVAIL_PATH='/etc/nginx/sites-available/'
 parser = argparse.ArgumentParser()
 parser.add_argument("-e", "--enable", help="enable site")
 parser.add_argument("-d", "--disable", help="disable site")
-
+parser.add_argument("-s", "--service", help="change service state", choices="start|stop|restart|reload|force-reload|status|configtest")
 args = parser.parse_args()
 
 def enable_site(sitename):
@@ -21,7 +21,7 @@ def enable_site(sitename):
         except OSError, e:
             print "site %s is enabled" % sitename
         else:
-            restart_nginx()
+            make_nginx()
 
         list_all_sites()
         return True
@@ -33,7 +33,7 @@ def disable_site(sitename):
     full_site_path = os.path.join(SITES_ENAB_PATH, sitename)
     if os.path.exists(full_site_path):
         os.remove(full_site_path)
-        restart_nginx()
+        make_nginx()
         list_all_sites()
         return True
     else:
@@ -52,8 +52,8 @@ def list_all_sites():
 
     # list all site with status
 
-def restart_nginx():
-    os.system("service nginx restart")
+def make_nginx(action="restart"):
+    os.system("service nginx %s" % action)
 
 
 if __name__ == "__main__":
@@ -69,6 +69,9 @@ if __name__ == "__main__":
             print "disabling", args.disable
             sitename = args.disable
             disable_site(sitename)
+
+        elif args.service:
+            make_nginx(args.service)
 
         else:
             print "All site status:"
