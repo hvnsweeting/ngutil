@@ -16,8 +16,13 @@ def enable_site(sitename):
     full_site_path = os.path.join(SITES_AVAIL_PATH, sitename)
     if os.path.exists(full_site_path):
         os.chdir(SITES_ENAB_PATH)
-        os.symlink(full_site_path, sitename)
-        restart_nginx()
+        try:
+            os.symlink(full_site_path, sitename)
+        except OSError, e:
+            print "site %s is enabled" % sitename
+        else:
+            restart_nginx()
+
         list_all_sites()
         return True
     else:
