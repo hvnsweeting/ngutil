@@ -106,7 +106,7 @@ def main():
 
         elif args.pass_to and args.server_name:
             if not args.port:
-                apgs.port = 80
+                args.port = 80
             fpath = create_rproxy_config(args.server_name, args.pass_to, args.port)
 
             print "Created config file %s" % fpath
