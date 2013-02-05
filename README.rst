@@ -42,3 +42,7 @@ enable::
     Restarting nginx: nginx.
     default ---------- enabled
 
+create reverse-proxy config::
+
+    hvn@u1210: $ sudo ./ngutil.py -n dantri.com -t 10.0.0.2
+    Created config file /etc/nginx/sites-available/dantri.com
